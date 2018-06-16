@@ -3,8 +3,8 @@
 #MASTER SALT INSTALL
 #==============================================
 apt install salt-master -y
+apt install salt-minion -y
 apt install salt-ssh -y
-
 
 #==============================================
 #MASTER SALT SETTINGS
@@ -12,6 +12,13 @@ apt install salt-ssh -y
   #Downloading salt-minion/salt-master config files
 wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
 wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
+wget http://10.1.1.6/salt-master/salt-master/roster -O /etc/salt/roster
+service salt-master restart
+service salt-minion restart
+
+  #Accepting keys salt local.minion
+salt-key -a Ubuntu-1710-Master-salt -y
+
 
   #Creating Salt directories
   #Salt States directories
@@ -23,8 +30,18 @@ mkdir -p /srv/salt/states/base/
 mkdir -p /srv/salt/pillars/
 mkdir -p /srv/salt/pillars/base/
 
+
 #==============================================
-#MASTER SALT STATE FILES
+#MINION SALT INSTALL
+#==============================================
+  #Downloading private key
+mkdir -p /home/benjamin/keys/
+wget http://10.1.1.6/salt-master/salt-master/ssh-private -O /home/benjamin/keys/ssh-private
+chmod 600 /home/benjamin/keys/ssh-private
+
+
+#==============================================
+#MASTER SALT STATE FILES FOR MINION
 #==============================================
 
   #Downloading Apache2 init file
@@ -52,3 +69,7 @@ wget http://10.1.1.6/salt-master/snmp/init.sls -O /srv/salt/states/base/snmp/ini
 mkdir -p /srv/salt/states/base/snmpd/
 wget http://10.1.1.6/salt-master/snmpd/init.sls -O /srv/salt/states/base/snmpd/init.sls
 wget http://10.1.1.6/salt-master/snmpd/snmpd.conf -O /srv/salt/states/base/snmpd/snmpd.conf
+
+#==============================================
+#MASTER SALT CACTI (MONITOR)
+#==============================================
