@@ -12,6 +12,7 @@ apt install salt-ssh -y
   #Downloading salt-minion/salt-master config files
 wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
 wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
+  #File for salt-ssh
 wget http://10.1.1.6/salt-master/salt-master/roster -O /etc/salt/roster
 service salt-master restart
 service salt-minion restart
