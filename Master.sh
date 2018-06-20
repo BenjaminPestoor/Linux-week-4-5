@@ -11,8 +11,9 @@ service salt-master restart
 service salt-minion restart
 
   #Accepting keys salt local.minion
-salt-key -a Ubuntu-1710-Master-salt -y
-
+#salt-key -a Ubuntu-1710-Master-salt -y
+#salt-key -a Ubuntu-1710-Minion-salt -y
+salt-key -a Ubuntu-1710-VM1 -y
 
   #Creating Salt directories
   #Salt States directories
