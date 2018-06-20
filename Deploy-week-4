@@ -2,6 +2,19 @@
 #==============================================
 #MASTER SALT SETTINGS
 #==============================================
+  #Downloading salt-minion/salt-master config files
+wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
+wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
+
+  #restarting services
+service salt-master restart
+service salt-minion restart
+
+  #Accepting keys salt local.minion
+  salt-key list
+#salt-key -a Ubuntu-1710-Master-salt -y
+
+
   #Creating Salt directories
   #Salt States directories
 mkdir -p /srv/salt/
@@ -11,6 +24,7 @@ mkdir -p /srv/salt/states/base/
   #Salt Pillars directories
 mkdir -p /srv/salt/pillars/
 mkdir -p /srv/salt/pillars/base/
+
 
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
