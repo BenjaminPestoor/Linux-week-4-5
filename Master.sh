@@ -1,19 +1,12 @@
 #!/bin/bash
 #==============================================
-#MASTER SALT INSTALL
-#==============================================
-apt install salt-master -y
-apt install salt-minion -y
-apt install salt-ssh -y
-
-#==============================================
 #MASTER SALT SETTINGS
 #==============================================
   #Downloading salt-minion/salt-master config files
 wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
 wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
-  #File for salt-ssh
-wget http://10.1.1.6/salt-master/salt-master/roster -O /etc/salt/roster
+  
+  #restarting salt-services
 service salt-master restart
 service salt-minion restart
 
@@ -30,15 +23,6 @@ mkdir -p /srv/salt/states/base/
   #Salt Pillars directories
 mkdir -p /srv/salt/pillars/
 mkdir -p /srv/salt/pillars/base/
-
-
-#==============================================
-#MINION SALT INSTALL
-#==============================================
-  #Downloading private key
-mkdir -p /home/benjamin/keys/
-wget http://10.1.1.6/salt-master/salt-master/ssh-private -O /home/benjamin/keys/ssh-private
-chmod 600 /home/benjamin/keys/ssh-private
 
 
 #==============================================
@@ -70,7 +54,3 @@ wget http://10.1.1.6/salt-master/snmp/init.sls -O /srv/salt/states/base/snmp/ini
 mkdir -p /srv/salt/states/base/snmpd/
 wget http://10.1.1.6/salt-master/snmpd/init.sls -O /srv/salt/states/base/snmpd/init.sls
 wget http://10.1.1.6/salt-master/snmpd/snmpd.conf -O /srv/salt/states/base/snmpd/snmpd.conf
-
-#==============================================
-#MASTER SALT CACTI (MONITOR)
-#==============================================
