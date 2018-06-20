@@ -5,7 +5,7 @@
   #Downloading salt-minion/salt-master config files
 wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
 wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
-  
+
   #restarting salt-services
 service salt-master restart
 service salt-minion restart
@@ -55,3 +55,15 @@ wget http://10.1.1.6/salt-master/snmp/init.sls -O /srv/salt/states/base/snmp/ini
 mkdir -p /srv/salt/states/base/snmpd/
 wget http://10.1.1.6/salt-master/snmpd/init.sls -O /srv/salt/states/base/snmpd/init.sls
 wget http://10.1.1.6/salt-master/snmpd/snmpd.conf -O /srv/salt/states/base/snmpd/snmpd.conf
+
+  #Downloading top.sls config
+wget http://10.1.1.6/salt-master/salt-master/top.sls -O /srv/salt/states/base/top.sls
+
+#==============================================
+#MINION SALT INSTALL SNMP, SNMPD, RSYSLOG, MYSQL-CLIENT, PHP & APACHE2 + ALL SETTINGS FOR LOGGING AND MONITORING
+#==============================================
+  #restarting salt-services
+service salt-master restart
+service salt-minion restart
+  #read top.sls and start salt
+salt 'Ubuntu-1710-VM1' state.highstate
