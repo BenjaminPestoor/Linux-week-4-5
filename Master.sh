@@ -18,11 +18,6 @@ wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/m
 service salt-master restart
 service salt-minion restart
 
-  #Accepting keys salt local.minion
-#salt-key -a Ubuntu-1710-Master-salt -y
-#salt-key -a Ubuntu-1710-Minion-salt -y
-salt-key -a Ubuntu-1710-VM1 -y
-
   #Creating Salt directories
   #Salt States directories
 mkdir -p /srv/salt/
@@ -72,4 +67,5 @@ wget http://10.1.1.6/salt-master/salt-master/top.sls -O /srv/salt/states/base/to
 service salt-master restart
 service salt-minion restart
   #read top.sls and start salt
-salt 'Ubuntu-1710-VM1' state.highstate
+salt 'Ubuntu-1710-Salty-Master' state.highstate
+salt 'Ubuntu-1710-Salty-Minion' state.highstate
