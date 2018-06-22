@@ -1,4 +1,5 @@
 #!/bin/bash
+
 #==============================================
 #MASTER UPDATE / UPGRADE
 #==============================================
@@ -8,16 +9,8 @@ apt update
 apt upgrade
 
 #==============================================
-#MASTER SALT SETTINGS
+#MASTER SALT DIRECTORIES
 #==============================================
-  #Downloading salt-minion/salt-master config files
-wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
-wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
-
-  #restarting salt-services
-service salt-master restart
-service salt-minion restart
-
   #Creating Salt directories
   #Salt States directories
 mkdir -p /srv/salt/
@@ -27,6 +20,11 @@ mkdir -p /srv/salt/states/base/
   #Salt Pillars directories
 mkdir -p /srv/salt/pillars/
 mkdir -p /srv/salt/pillars/base/
+
+#==============================================
+#MASTER SALT INSTALL CACTI
+#==============================================
+
 
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
@@ -66,6 +64,7 @@ wget http://10.1.1.6/salt-master/salt-master/top.sls -O /srv/salt/states/base/to
   #restarting salt-services
 service salt-master restart
 service salt-minion restart
+
   #read top.sls and start salt
-salt 'Ubuntu-1710-Salty-Master' state.highstate
-salt 'Ubuntu-1710-Salty-Minion' state.highstate
+#salt 'Ubuntu-1710-Salty-Master' state.highstate
+#salt 'Ubuntu-1710-Salty-Minion' state.highstate
