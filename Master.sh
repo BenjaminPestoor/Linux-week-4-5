@@ -1,5 +1,13 @@
 #!/bin/bash
 #==============================================
+#MASTER UPDATE / UPGRADE
+#==============================================
+  #Update
+apt update
+  #Upgrade
+apt upgrade
+
+#==============================================
 #MASTER SALT SETTINGS
 #==============================================
   #Downloading salt-minion/salt-master config files
@@ -25,11 +33,9 @@ mkdir -p /srv/salt/states/base/
 mkdir -p /srv/salt/pillars/
 mkdir -p /srv/salt/pillars/base/
 
-
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
 #==============================================
-
   #Downloading Apache2 init file
 mkdir -p /srv/salt/states/base/apache2/
 wget http://10.1.1.6/salt-master/apache2/init.sls -O /srv/salt/states/base/apache2/init.sls
