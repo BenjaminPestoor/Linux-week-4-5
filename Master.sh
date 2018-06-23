@@ -22,9 +22,11 @@ mkdir -p /srv/salt/pillars/
 mkdir -p /srv/salt/pillars/base/
 
 #==============================================
-#MASTER SALT INSTALL CACTI
+#MASTER SALT INSTALL CACTI / MYSQL
 #==============================================
-
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
+apt-get -y install mysql-server
 
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
