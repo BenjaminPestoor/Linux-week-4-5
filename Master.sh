@@ -26,13 +26,28 @@ mkdir -p /srv/salt/pillars/base/
 #==============================================
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
-debconf-set-selections <<< 'cacti cacti/mysql/app-pass password admin'
-debconf-set-selections <<< 'cacti cacti/password-confirm select true'
-debconf-set-selections <<< 'cacti cacti/dbconfig-install select true'
-
 
 apt-get -y install mysql-server
 apt-get -y install php
+apt-get -y install apache2
+apt-get -y install php-mysql
+apt-get -y install php-snmp
+apt-get -y install php-xml
+
+mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
+
+wget https://www.cacti.net/downloads/cacti-1.1.38.tar.gz
+tar xfz cacti-1.1.38.tar.gz
+cp -rf cacti-1.1.38/* /var/www/html/
+
+mv /var/www/html/index_backup
+touch /var/www/html/log/cacti.log
+chown -R www-data:www-data /var/www/html/
+wget http://10.1.1.6/salt-master/cacti/config -O /var/www/html/include/config.php
+
+apt install snmp snmpd snmp-mibs-downloader rrdtool
+
+restart snmpd.service
 
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
