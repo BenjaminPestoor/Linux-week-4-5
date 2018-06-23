@@ -26,7 +26,13 @@ mkdir -p /srv/salt/pillars/base/
 #==============================================
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
+debconf-set-selections <<< 'cacti cacti/mysql/app-pass password admin'
+debconf-set-selections <<< 'cacti cacti/password-confirm select true'
+debconf-set-selections <<< 'cacti cacti/dbconfig-install select true'
+
+
 apt-get -y install mysql-server
+apt-get -y install php
 
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
