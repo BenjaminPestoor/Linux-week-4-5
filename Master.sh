@@ -40,7 +40,7 @@ wget https://www.cacti.net/downloads/cacti-1.1.38.tar.gz
 tar xfz cacti-1.1.38.tar.gz
 cp -rf cacti-1.1.38/* /var/www/html/
 
-mv /var/www/html/index_backup
+mv /var/www/html/index.html /var/www/html/index_backup
 touch /var/www/html/log/cacti.log
 chown -R www-data:www-data /var/www/html/
 wget http://10.1.1.6/salt-master/cacti/config -O /var/www/html/include/config.php
