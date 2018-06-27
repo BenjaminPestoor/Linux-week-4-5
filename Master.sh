@@ -32,6 +32,18 @@ debconf-set-selections <<< 'mysql-server mysql-server/root_password_again passwo
   #installing mysql
 apt-get -y install mysql-server
 
+
+
+
+
+
+apt install rsyslog-mysql
+
+
+
+
+
+
   #installing salt-master / salt-minion with config
 apt-get -y install salt-master
 wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
