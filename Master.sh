@@ -21,6 +21,8 @@ mkdir -p /srv/salt/states/base/
 mkdir -p /srv/salt/pillars/
 mkdir -p /srv/salt/pillars/base/
 
+mkdir -p /var/www/html/cacti
+
 #==============================================
 #MASTER SALT INSTALL CACTI / MYSQL / SALT MASTER
 #==============================================
@@ -69,6 +71,7 @@ touch /var/www/html/log/cacti.log
 wget http://10.1.1.6/salt-master/cacti/config.php -O /var/www/html/cacti/include/config.php
 
 service snmpd restart
+service apache2 restart
 
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
