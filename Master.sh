@@ -22,32 +22,53 @@ mkdir -p /srv/salt/pillars/
 mkdir -p /srv/salt/pillars/base/
 
 #==============================================
-#MASTER SALT INSTALL CACTI / MYSQL
+#MASTER SALT INSTALL CACTI / MYSQL / SALT MASTER
 #==============================================
+  #setting password mysql install
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
-
+  #installing mysql
 apt-get -y install mysql-server
+
+  #installing salt-master / salt-minion with config
+apt-get -y install salt-master
+wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
+apt-get -y install salt-minion
+wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
+  #restarting salt-master / salt-minion
+service salt-master restart
+service salt-minion restart
+
+  #accepting key salt-minion
+keys -A
+
+  #install rest of needed programs
 apt-get -y install php
 apt-get -y install apache2
 apt-get -y install php-mysql
 apt-get -y install php-snmp
 apt-get -y install php-xml
+apt-get -y install snmp
+apt-get -y install snmpd
+apt-get -y install snmp-mibs-downloader
+apt-get -y install rrdtool
 
+  #creating database cacti
 mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
+wget http://10.1.1.6/salt-master/cacti/cacti.sql -O /var/www/html/cacti/cacti.sql
+  #importing sql databse
+mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
 
-wget https://www.cacti.net/downloads/cacti-1.1.38.tar.gz
-tar xfz cacti-1.1.38.tar.gz
-cp -rf cacti-1.1.38/* /var/www/html/
+  #downloading cacti 1.1.18 / copying cacti to webserver
+wget https://www.cacti.net/downloads/cacti-1.1.18.tar.gz
+tar xfz cacti-1.1.18.tar.gz
+cp -rf cacti-1.1.18/* /var/www/html/cacti
 
-mv /var/www/html/index.html /var/www/html/index_backup
+  #downloading settings file cacti / activating log
 touch /var/www/html/log/cacti.log
-chown -R www-data:www-data /var/www/html/
-wget http://10.1.1.6/salt-master/cacti/config -O /var/www/html/include/config.php
+wget http://10.1.1.6/salt-master/cacti/config.php -O /var/www/html/cacti/include/config.php
 
-apt install snmp snmpd snmp-mibs-downloader rrdtool
-
-restart snmpd.service
+service snmpd restart
 
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
@@ -89,5 +110,4 @@ service salt-master restart
 service salt-minion restart
 
   #read top.sls and start salt
-#salt 'Ubuntu-1710-Salty-Master' state.highstate
-#salt 'Ubuntu-1710-Salty-Minion' state.highstate
+#salt '*' state.highstate
