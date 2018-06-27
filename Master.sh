@@ -42,7 +42,7 @@ service salt-master restart
 service salt-minion restart
 
   #accepting key salt-minion
-keys -A
+salt-key -A -y
 
   #install rest of needed programs
 apt-get -y install php
