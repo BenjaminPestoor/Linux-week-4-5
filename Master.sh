@@ -69,23 +69,25 @@ salt-key -A -y
   #install rest of needed programs
 apt-get -y install php
 apt-get -y install apache2
-apt-get -y install php-mysql
-apt-get -y install php-snmp
-apt-get -y install php-xml
+apt-get -y install php7.1*
 apt-get -y install snmp
 apt-get -y install snmpd
 apt-get -y install snmp-mibs-downloader
 apt-get -y install rrdtool
+apt-get -y install zip
+apt-get -y install unzip
 
-#  #creating database cacti
-#mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
-#wget http://10.1.1.6/salt-master/cacti/cacti.sql -O /var/www/html/cacti/cacti.sql
-#  #importing sql databse
-#mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
+  #creating database cacti
+mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
+http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
+  #importing sql databse
+mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
 
 #==============================================
 #DOWNLOAD CACTI
 #==============================================
+wget http://40.114.239.82/salt-master/salt-master/cacti.zip
+unzip cacti.zip -d /var/www/html/
 
 service snmpd restart
 service apache2 restart
@@ -140,8 +142,8 @@ echo "sleeping done"
   #read top.sls and start salt
 salt '*' state.apply snmp
 salt '*' state.apply snmpd
-salt 'Ubuntu-1710-Master-Salt-final' state.apply rsyslog.master
-salt 'Ubuntu-1710-Salty-Minion' state.apply rsyslog.minion
+salt 'Ubuntu-1710-Master-Salt-final' state.apply rsyslogmaster
+salt 'Ubuntu-1710-Salty-Minion' state.apply rsyslogminion
 salt '*' state.apply php
 salt '*' state.apply apache2
 salt 'Ubuntu-1710-Salty-Minion' state.apply mysql-client
