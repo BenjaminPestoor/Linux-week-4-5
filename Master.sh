@@ -69,7 +69,7 @@ salt-key -A -y
   #install rest of needed programs
 apt-get -y install php
 apt-get -y install apache2
-apt-get -y install php7.1*
+apt-get -y install php*
 apt-get -y install snmp
 apt-get -y install snmpd
 apt-get -y install snmp-mibs-downloader
