@@ -17,7 +17,8 @@ wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/m
   #restarting salt-master / salt-minion
 service salt-master restart
 service salt-minion restart
-
+echo "it's time to restart salt-minion on minion"
+sleep 10
 
 #==============================================
 #MASTER SALT DIRECTORIES
