@@ -4,9 +4,9 @@
 #MASTER UPDATE / UPGRADE
 #==============================================
   #Update
-apt update
+apt update -y
   #Upgrade
-apt upgrade
+apt upgrade -y
 
 #==============================================
 #MASTER SALT DIRECTORIES
@@ -49,6 +49,15 @@ debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-install  select
 apt-get -y install mysql-server
 apt-get -y install rsyslog-mysql
 
+  #setting password mysql install / rsyslog mysql
+debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
+debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/app-password-confirm password admin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/app-pass password amdin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/admin-pass  password admin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/password-confirm  password admin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-install  select true'
+
   #installing salt-master / salt-minion with config
 apt-get -y install salt-master
 wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
@@ -88,7 +97,7 @@ mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/ht
 #==============================================
 #DOWNLOAD CACTI
 #==============================================
-wget http://40.114.239.82/salt-master/salt-master/cacti.zip
+wget http://10.1.1.6/salt-master/salt-master/cacti.zip
 unzip cacti.zip -d /var/www/html/
 
 service snmpd restart
@@ -149,6 +158,6 @@ salt 'Ubuntu-1710-Salty-Minion' state.apply mysql-client
 #==============================================
 # WORDPRESS
 #==============================================
-wget http://40.115.23.218/salt-master/wordpress/init.slss -O /srv/salt/states/base/wordpress/init.sls
-wget http://40.115.23.218/salt-master/wordpress/script.sh -O /srv/salt/states/base/wordpress/script.sh
+wget http://10.1.1.6/salt-master/wordpress/init.slss -O /srv/salt/states/base/wordpress/init.sls
+wget http://10.1.1.6/salt-master/wordpress/script.sh -O /srv/salt/states/base/wordpress/script.sh
 salt 'Ubuntu-1710-Salty-Minion' state.apply wordpress
