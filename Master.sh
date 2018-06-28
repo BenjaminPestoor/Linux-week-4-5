@@ -39,16 +39,17 @@ mkdir -p /var/www/html/cacti/
   #setting password mysql / rsyslog mysql / phpmyadmin
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/app-password-confirm password admin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/app-pass password amdin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/admin-pass  password admin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/password-confirm  password admin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-install  select true'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/setup-password password admin'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver select apache2'
+
 
   #installing mysql
 apt-get -y install mysql-server
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/setup-password password admin'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver select'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password admin'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password admin'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password admin'
+
 apt-get -y install rsyslog-mysql
 
   #installing salt-master / salt-minion with config
@@ -68,13 +69,13 @@ sleep 10
 echo "accepting salt keys"
 
   #accepting key salt-minion
+salt-key list
 salt-key -A -y
 
   #install rest of needed programs
 apt-get -y install php
 apt-get -y install apache2
 apt-get -y install php*
-apt-get -y install php-7.1-*
 apt-get -y install snmp
 apt-get -y install snmpd
 apt-get -y install snmp-mibs-downloader
