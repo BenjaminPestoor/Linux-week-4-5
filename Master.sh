@@ -8,6 +8,15 @@ apt update -y
   #Upgrade
 apt upgrade -y
 
+  #installing salt-master / salt-minion with config
+DEBIAN_FRONTEND=noninteractive apt-get install -y salt-master
+wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
+DEBIAN_FRONTEND=noninteractive apt-get install -y salt-minion
+wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
+  #restarting salt-master / salt-minion
+service salt-master restart
+service salt-minion restart
+
 #==============================================
 #MASTER SALT DIRECTORIES
 #==============================================
@@ -34,51 +43,28 @@ mkdir -p /srv/salt/pillars/base/
 mkdir -p /var/www/html/cacti/
 
 #==============================================
-#MASTER SALT MYSQL / SALT MASTER
+#MASTER SALT MYSQL / SALT / PROGRAMS
 #==============================================
-  #setting password mysql / rsyslog mysql / phpmyadmin
-debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
-debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/setup-password password admin'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver select'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password admin'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password admin'
-debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password admin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-upgrade select true'
-
   #installing mysql
-apt-get -y install mysql-server
+DEBIAN_FRONTEND=noninteractive apt-get install -y mysql-server
 
-apt-get -y install rsyslog-mysql
+DEBIAN_FRONTEND=noninteractive apt-get install -y rsyslog-mysql
 
-  #installing salt-master / salt-minion with config
-apt-get -y install salt-master
-wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
-apt-get -y install salt-minion
-wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
-  #restarting salt-master / salt-minion
-service salt-master restart
-service salt-minion restart
-
-  #waiting for salt
-echo "waiting for salt 10 seconds"
-sleep 10
-echo "accepting salt keys"
   #accepting key salt-minion
 salt-key list
 salt-key -A -y
 
   #install rest of needed programs
-apt-get -y install apache2
-apt-get -y install php*
-apt-get -y install snmp
-apt-get -y install snmpd
-apt-get -y install snmp-mibs-downloader
-apt-get -y install rrdtool
-apt-get -y install zip
-apt-get -y install unzip
-apt-get -y install phpmyadmin
+DEBIAN_FRONTEND=noninteractive apt-get install -y apache2
+DEBIAN_FRONTEND=noninteractive apt-get install -y php*
+DEBIAN_FRONTEND=noninteractive apt-get install -y snmp
+DEBIAN_FRONTEND=noninteractive apt-get install -y snmpd
+DEBIAN_FRONTEND=noninteractive apt-get install -y snmp-mibs-downloader
+DEBIAN_FRONTEND=noninteractive apt-get install -y rrdtool
+DEBIAN_FRONTEND=noninteractive apt-get install -y rrdtool
+DEBIAN_FRONTEND=noninteractive apt-get install -y zip
+DEBIAN_FRONTEND=noninteractive apt-get install -y unzip
+DEBIAN_FRONTEND=noninteractive apt-get install -y phpmyadmin
 
 #==============================================
 #INSTALL CACTI
@@ -126,14 +112,6 @@ wget http://10.1.1.6/salt-master/salt-master/top.sls -O /srv/salt/states/base/to
 #==============================================
 #MINION SALT INSTALL SNMP, SNMPD, RSYSLOG, MYSQL-CLIENT, PHP & APACHE2 + ALL SETTINGS FOR LOGGING AND MONITORING
 #==============================================
-  #restarting salt-services
-service salt-master restart
-service salt-minion restart
-
-echo "sleeping for 10 seconds"
-sleep 10
-echo "sleeping done"
-salt-key -A -y
 
   #read top.sls and start salt
 salt 'Ubuntu-1710-Salty-Minion' state.apply snmp
@@ -143,7 +121,6 @@ salt 'Ubuntu-1710-Salty-Minion' state.apply rsyslogminion
 salt 'Ubuntu-1710-Salty-Minion' state.apply php
 salt 'Ubuntu-1710-Salty-Minion' state.apply apache2
 salt 'Ubuntu-1710-Salty-Minion' state.apply mysql-client
-
 
 #==============================================
 # WORDPRESS
