@@ -79,7 +79,7 @@ apt-get -y install unzip
 
   #creating database cacti
 mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
-http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
+wget http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
   #importing sql databse
 mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
 
