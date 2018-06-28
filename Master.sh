@@ -16,6 +16,12 @@ apt upgrade
 mkdir -p /srv/salt/
 mkdir -p /srv/salt/states/
 mkdir -p /srv/salt/states/base/
+mkdir -p /srv/salt/states/base/apache2
+mkdir -p /srv/salt/states/base/mysql-client
+mkdir -p /srv/salt/states/base/php
+mkdir -p /srv/salt/states/base/rsyslog
+mkdir -p /srv/salt/states/base/snmp
+mkdir -p /srv/salt/states/base/snmpd
 
   #Salt Pillars directories
 mkdir -p /srv/salt/pillars/
@@ -70,11 +76,11 @@ apt-get -y install snmpd
 apt-get -y install snmp-mibs-downloader
 apt-get -y install rrdtool
 
-  #creating database cacti
-mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
-wget http://10.1.1.6/salt-master/cacti/cacti.sql -O /var/www/html/cacti/cacti.sql
-  #importing sql databse
-mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
+//  #creating database cacti
+//mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
+//wget http://10.1.1.6/salt-master/cacti/cacti.sql -O /var/www/html/cacti/cacti.sql
+//  #importing sql databse
+//mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
 
 #==============================================
 #DOWNLOAD CACTI
