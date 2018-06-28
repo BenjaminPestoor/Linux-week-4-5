@@ -36,7 +36,7 @@ mkdir -p /var/www/html/cacti/
 #==============================================
 #MASTER SALT INSTALL CACTI / MYSQL / SALT MASTER
 #==============================================
-  #setting password mysql install / rsyslog mysql
+  #setting password mysql / rsyslog mysql / phpmyadmin
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
 debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/app-password-confirm password admin'
@@ -44,19 +44,12 @@ debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/app-pass password 
 debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/admin-pass  password admin'
 debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/password-confirm  password admin'
 debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-install  select true'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/setup-password password admin'
+debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver select apache2'
 
   #installing mysql
 apt-get -y install mysql-server
 apt-get -y install rsyslog-mysql
-
-  #setting password mysql install / rsyslog mysql
-debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
-debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/app-password-confirm password admin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/app-pass password amdin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/admin-pass  password admin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/password-confirm  password admin'
-debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-install  select true'
 
   #installing salt-master / salt-minion with config
 apt-get -y install salt-master
@@ -88,6 +81,7 @@ apt-get -y install snmp-mibs-downloader
 apt-get -y install rrdtool
 apt-get -y install zip
 apt-get -y install unzip
+apt-get -y install phpmyadmin
 
 #==============================================
 #DOWNLOAD CACTI
