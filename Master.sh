@@ -106,7 +106,6 @@ mkdir -p /srv/salt/states/base/php/
 wget http://10.1.1.6/salt-master/php/init.sls -O /srv/salt/states/base/php/init.sls
 
   #Downloading rsyslog init file and config
-mkdir -p /srv/salt/states/base/rsyslog/
 wget http://10.1.1.6/salt-master/rsyslog.master/init.sls -O /srv/salt/states/base/rsyslog.master/init.sls
 wget http://10.1.1.6/salt-master/rsyslog.minion/init.sls -O /srv/salt/states/base/rsyslog.minion/init.sls
 wget http://10.1.1.6/salt-master/rsyslog.minion/remote.conf -O /srv/salt/states/base/rsyslog.minion/remote.conf
@@ -132,15 +131,17 @@ service salt-master restart
 service salt-minion restart
 
 echo "salt has to load for a while"
-echo "waiting for 60 more seconds"
-sleep 20
-echo "sleeping for 40 more seconds"
-sleep 20
-echo "sleeping for 20 more seconds"
+echo "sleeping for 20 seconds"
 sleep 10
 echo "sleeping for 10 more seconds"
 sleep 10
 echo "sleeping done"
 
   #read top.sls and start salt
-salt '*' state.highstate
+salt '*' state.apply snmp
+salt '*' state.apply snmpd
+salt 'Ubuntu-1710-Master-Salt-final' state.apply rsyslog.master
+salt 'Ubuntu-1710-Salty-Minion' state.apply rsyslog.minion
+salt '*' state.apply php
+salt '*' state.apply apache2
+salt 'Ubuntu-1710-Salty-Minion' state.apply mysql-client
