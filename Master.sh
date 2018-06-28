@@ -107,7 +107,8 @@ wget http://10.1.1.6/salt-master/php/init.sls -O /srv/salt/states/base/php/init.
 
   #Downloading rsyslog init file and config
 mkdir -p /srv/salt/states/base/rsyslog/
-wget http://10.1.1.6/salt-master/rsyslog.master/init.sls -O /srv/salt/states/base/rsyslog/init.sls
+wget http://10.1.1.6/salt-master/rsyslog.master/init.sls -O /srv/salt/states/base/rsyslog.master/init.sls
+wget http://10.1.1.6/salt-master/rsyslog.minion/init.sls -O /srv/salt/states/base/rsyslog.minion/init.sls
 wget http://10.1.1.6/salt-master/rsyslog.minion/remote.conf -O /srv/salt/states/base/rsyslog.minion/remote.conf
 wget http://10.1.1.6/salt-master/rsyslog.master/master.conf -O /srv/salt/states/base/rsyslog.master/master.conf
 
