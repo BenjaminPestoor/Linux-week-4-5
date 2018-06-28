@@ -34,21 +34,21 @@ mkdir -p /srv/salt/pillars/base/
 mkdir -p /var/www/html/cacti/
 
 #==============================================
-#MASTER SALT INSTALL CACTI / MYSQL / SALT MASTER
+#MASTER SALT MYSQL / SALT MASTER
 #==============================================
   #setting password mysql / rsyslog mysql / phpmyadmin
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
-
-
-  #installing mysql
-apt-get -y install mysql-server
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/setup-password password admin'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/reconfigure-webserver select'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/dbconfig-install boolean true'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/app-password-confirm password admin'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password admin'
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password admin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-upgrade select true'
+
+  #installing mysql
+apt-get -y install mysql-server
 
 apt-get -y install rsyslog-mysql
 
@@ -62,18 +62,14 @@ service salt-master restart
 service salt-minion restart
 
   #waiting for salt
-echo "waiting for salt 20 seconds"
-sleep 10
 echo "waiting for salt 10 seconds"
 sleep 10
 echo "accepting salt keys"
-
   #accepting key salt-minion
 salt-key list
 salt-key -A -y
 
   #install rest of needed programs
-apt-get -y install php
 apt-get -y install apache2
 apt-get -y install php*
 apt-get -y install snmp
@@ -85,7 +81,7 @@ apt-get -y install unzip
 apt-get -y install phpmyadmin
 
 #==============================================
-#DOWNLOAD CACTI
+#INSTALL CACTI
 #==============================================
 wget http://10.1.1.6/salt-master/salt-master/cacti.zip
 unzip cacti.zip -d /var/www/html/
@@ -134,10 +130,7 @@ wget http://10.1.1.6/salt-master/salt-master/top.sls -O /srv/salt/states/base/to
 service salt-master restart
 service salt-minion restart
 
-echo "salt has to load for a while"
-echo "sleeping for 20 seconds"
-sleep 10
-echo "sleeping for 10 more seconds"
+echo "sleeping for 10 seconds"
 sleep 10
 echo "sleeping done"
 salt-key -A -y
