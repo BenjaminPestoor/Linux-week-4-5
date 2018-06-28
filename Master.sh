@@ -8,6 +8,17 @@ apt update -y
   #Upgrade
 apt upgrade -y
 
+
+  #installing salt-master / salt-minion with config
+apt-get -y install salt-master
+wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
+apt-get -y install salt-minion
+wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
+  #restarting salt-master / salt-minion
+service salt-master restart
+service salt-minion restart
+
+
 #==============================================
 #MASTER SALT DIRECTORIES
 #==============================================
@@ -51,18 +62,6 @@ debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-upgrade select 
 apt-get -y install mysql-server
 apt-get -y install rsyslog-mysql
 
-  #installing salt-master / salt-minion with config
-apt-get -y install salt-master
-wget http://10.1.1.6/salt-master/salt-master/master.conf -O /etc/salt/master.d/master.conf
-apt-get -y install salt-minion
-wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/minion.conf
-  #restarting salt-master / salt-minion
-service salt-master restart
-service salt-minion restart
-
-  #waiting for salt
-echo "waiting for salt 10 seconds"
-sleep 10
 echo "accepting salt keys"
   #accepting key salt-minion
 salt-key list
