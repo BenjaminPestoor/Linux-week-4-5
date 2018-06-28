@@ -59,9 +59,9 @@ service salt-minion restart
 echo "waiting for salt 20 seconds"
 sleep 10
 echo "waiting for salt 10 seconds"
-sleept 10
+sleep 10
 echo "accepting salt keys"
-  
+
   #accepting key salt-minion
 salt-key -A -y
 
