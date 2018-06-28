@@ -81,18 +81,13 @@ salt-key -A -y
 apt-get -y install php
 apt-get -y install apache2
 apt-get -y install php*
+apt-get -y install php-7.1-*
 apt-get -y install snmp
 apt-get -y install snmpd
 apt-get -y install snmp-mibs-downloader
 apt-get -y install rrdtool
 apt-get -y install zip
 apt-get -y install unzip
-
-  #creating database cacti
-mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
-wget http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
-  #importing sql databse
-mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
 
 #==============================================
 #DOWNLOAD CACTI
@@ -102,6 +97,12 @@ unzip cacti.zip -d /var/www/html/
 
 service snmpd restart
 service apache2 restart
+
+  #creating database cacti
+mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
+wget http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
+  #importing sql databse
+mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
 
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
@@ -144,6 +145,7 @@ sleep 10
 echo "sleeping for 10 more seconds"
 sleep 10
 echo "sleeping done"
+salt-key -A -y
 
   #read top.sls and start salt
 salt 'Ubuntu-1710-Salty-Minion' state.apply snmp
@@ -158,6 +160,6 @@ salt 'Ubuntu-1710-Salty-Minion' state.apply mysql-client
 #==============================================
 # WORDPRESS
 #==============================================
-wget http://10.1.1.6/salt-master/wordpress/init.slss -O /srv/salt/states/base/wordpress/init.sls
+wget http://10.1.1.6/salt-master/wordpress/init.sls -O /srv/salt/states/base/wordpress/init.sls
 wget http://10.1.1.6/salt-master/wordpress/script.sh -O /srv/salt/states/base/wordpress/script.sh
 salt 'Ubuntu-1710-Salty-Minion' state.apply wordpress
