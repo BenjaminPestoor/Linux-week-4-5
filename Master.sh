@@ -19,7 +19,8 @@ mkdir -p /srv/salt/states/base/
 mkdir -p /srv/salt/states/base/apache2
 mkdir -p /srv/salt/states/base/mysql-client
 mkdir -p /srv/salt/states/base/php
-mkdir -p /srv/salt/states/base/rsyslog
+mkdir -p /srv/salt/states/base/rsyslog.master
+mkdir -p /srv/salt/states/base/rsyslog.minion
 mkdir -p /srv/salt/states/base/snmp
 mkdir -p /srv/salt/states/base/snmpd
 
@@ -106,9 +107,9 @@ wget http://10.1.1.6/salt-master/php/init.sls -O /srv/salt/states/base/php/init.
 
   #Downloading rsyslog init file and config
 mkdir -p /srv/salt/states/base/rsyslog/
-wget http://10.1.1.6/salt-master/rsyslog/init.sls -O /srv/salt/states/base/rsyslog/init.sls
-wget http://10.1.1.6/salt-master/rsyslog/remote.conf -O /srv/salt/states/base/rsyslog/remote.conf
-wget http://10.1.1.6/salt-master/rsyslog/master.conf -O /srv/salt/states/base/rsyslog/master.conf
+wget http://10.1.1.6/salt-master/rsyslog.master/init.sls -O /srv/salt/states/base/rsyslog/init.sls
+wget http://10.1.1.6/salt-master/rsyslog.minion/remote.conf -O /srv/salt/states/base/rsyslog.minion/remote.conf
+wget http://10.1.1.6/salt-master/rsyslog.master/master.conf -O /srv/salt/states/base/rsyslog.master/master.conf
 
   #Downloading snmp init file
 mkdir -p /srv/salt/states/base/snmp/
