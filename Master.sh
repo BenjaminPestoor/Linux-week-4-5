@@ -21,28 +21,24 @@ mkdir -p /srv/salt/states/base/
 mkdir -p /srv/salt/pillars/
 mkdir -p /srv/salt/pillars/base/
 
-mkdir -p /var/www/html/cacti
+  #making salt directory
+mkdir -p /var/www/html/cacti/
 
 #==============================================
 #MASTER SALT INSTALL CACTI / MYSQL / SALT MASTER
 #==============================================
-  #setting password mysql install
+  #setting password mysql install / rsyslog mysql
 debconf-set-selections <<< 'mysql-server mysql-server/root_password password admin'
 debconf-set-selections <<< 'mysql-server mysql-server/root_password_again password admin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/app-password-confirm password admin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/app-pass password amdin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/mysql/admin-pass  password admin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/password-confirm  password admin'
+debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-install  select true'
+
   #installing mysql
 apt-get -y install mysql-server
-
-
-
-
-
-
-apt install rsyslog-mysql
-
-
-
-
-
+apt-get -y install rsyslog-mysql
 
   #installing salt-master / salt-minion with config
 apt-get -y install salt-master
@@ -53,6 +49,13 @@ wget http://10.1.1.6/salt-master/salt-minion/minion.conf -O /etc/salt/minion.d/m
 service salt-master restart
 service salt-minion restart
 
+  #waiting for salt
+echo "waiting for salt 20 seconds"
+sleep 10
+echo "waiting for salt 10 seconds"
+sleept 10
+echo "accepting salt keys"
+  
   #accepting key salt-minion
 salt-key -A -y
 
@@ -73,14 +76,9 @@ wget http://10.1.1.6/salt-master/cacti/cacti.sql -O /var/www/html/cacti/cacti.sq
   #importing sql databse
 mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
 
-  #downloading cacti 1.1.18 / copying cacti to webserver
-wget https://www.cacti.net/downloads/cacti-1.1.18.tar.gz
-tar xfz cacti-1.1.18.tar.gz
-cp -rf cacti-1.1.18/* /var/www/html/cacti
-
-  #downloading settings file cacti / activating log
-touch /var/www/html/log/cacti.log
-wget http://10.1.1.6/salt-master/cacti/config.php -O /var/www/html/cacti/include/config.php
+#==============================================
+#DOWNLOAD CACTI
+#==============================================
 
 service snmpd restart
 service apache2 restart
@@ -104,6 +102,7 @@ wget http://10.1.1.6/salt-master/php/init.sls -O /srv/salt/states/base/php/init.
 mkdir -p /srv/salt/states/base/rsyslog/
 wget http://10.1.1.6/salt-master/rsyslog/init.sls -O /srv/salt/states/base/rsyslog/init.sls
 wget http://10.1.1.6/salt-master/rsyslog/remote.conf -O /srv/salt/states/base/rsyslog/remote.conf
+wget http://10.1.1.6/salt-master/rsyslog/master.conf -O /srv/salt/states/base/rsyslog/master.conf
 
   #Downloading snmp init file
 mkdir -p /srv/salt/states/base/snmp/
@@ -124,5 +123,16 @@ wget http://10.1.1.6/salt-master/salt-master/top.sls -O /srv/salt/states/base/to
 service salt-master restart
 service salt-minion restart
 
+echo "salt has to load for a while"
+echo "waiting for 60 more seconds"
+sleep 20
+echo "sleeping for 40 more seconds"
+sleep 20
+echo "sleeping for 20 more seconds"
+sleep 10
+echo "sleeping for 10 more seconds"
+sleep 10
+echo "sleeping done"
+
   #read top.sls and start salt
-#salt '*' state.highstate
+salt '*' state.highstate
