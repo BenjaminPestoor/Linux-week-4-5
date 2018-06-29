@@ -44,6 +44,7 @@ mkdir -p /srv/salt/pillars/base/
 
   #making salt directory
 mkdir -p /var/www/html/cacti/
+chmod 777 /var/www/html/cacti/
 
 #==============================================
 #MASTER SALT MYSQL / SALT MASTER
@@ -59,6 +60,13 @@ debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password admi
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password admin'
 debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-upgrade select true'
 
+#install needed programs
+apt-get -y install apache2
+apt-get -y install snmp
+apt-get -y install snmpd
+apt-get -y install unzip
+apt install -y phpmyadmin
+
   #installing mysql
 apt-get -y install mysql-server
 apt-get -y install rsyslog-mysql
@@ -68,28 +76,19 @@ echo "accepting salt keys"
 salt-key list
 salt-key -A -y
 
-  #install rest of needed programs
-apt-get -y install apache2
-apt-get -y install php*
-apt-get -y install snmp
-apt-get -y install snmpd
-apt-get -y install snmp-mibs-downloader
-apt-get -y install rrdtool
-apt-get -y install zip
-apt-get -y install unzip
-
 #==============================================
 #INSTALL CACTI
 #==============================================
 wget http://10.1.1.6/salt-master/salt-master/cacti.zip
-unzip cacti.zip -d /var/www/html/
+wget https://www.cacti.net/downloads/cacti-1.1.38.zip
+unzip cacti-1.1.38.zip -d /var/www/html/
+mv /var/www/html/cacti-1.1.38/ var/www/html/cacti/
 
-service snmpd restart
 service apache2 restart
 
   #creating database cacti
 mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
-wget http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
+#wget http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
   #importing sql databse
 mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
 
@@ -140,6 +139,18 @@ salt 'Ubuntu-1710-Salty-Minion' state.apply php
 salt 'Ubuntu-1710-Salty-Minion' state.apply apache2
 salt 'Ubuntu-1710-Salty-Minion' state.apply mysql-client
 
+service salt-master restart
+service salt-minion restart
+
+salt-key -A
+
+salt 'Ubuntu-1710-Salty-Minion' state.apply snmp
+salt 'Ubuntu-1710-Salty-Minion' state.apply snmpd
+salt 'Ubuntu-1710-Master-Salt-final' state.apply rsyslogmaster
+salt 'Ubuntu-1710-Salty-Minion' state.apply rsyslogminion
+salt 'Ubuntu-1710-Salty-Minion' state.apply php
+salt 'Ubuntu-1710-Salty-Minion' state.apply apache2
+salt 'Ubuntu-1710-Salty-Minion' state.apply mysql-client
 
 #==============================================
 # WORDPRESS
