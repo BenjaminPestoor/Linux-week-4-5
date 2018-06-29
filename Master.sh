@@ -69,6 +69,7 @@ apt-get -y install snmpd
 apt-get -y install unzip
 apt install -y phpmyadmin
 apt-get -y install php7.1-ldap
+apt-get -y install php libapache2-mod-php
 echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
 
   #installing mysql
@@ -161,3 +162,6 @@ salt 'Ubuntu-1710-Salty-Minion' state.apply mysql-client
 wget http://10.1.1.6/salt-master/wordpress/init.sls -O /srv/salt/states/base/wordpress/init.sls
 wget http://10.1.1.6/salt-master/wordpress/script.sh -O /srv/salt/states/base/wordpress/script.sh
 salt 'Ubuntu-1710-Salty-Minion' state.apply wordpress
+
+
+#libapache2-mod-php7
