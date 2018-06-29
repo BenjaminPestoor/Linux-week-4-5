@@ -77,7 +77,6 @@ apt-get -y install snmp-mibs-downloader
 apt-get -y install rrdtool
 apt-get -y install zip
 apt-get -y install unzip
-apt-get -y install phpmyadmin
 
 #==============================================
 #INSTALL CACTI
@@ -129,10 +128,8 @@ wget http://10.1.1.6/salt-master/salt-master/top.sls -O /srv/salt/states/base/to
 service salt-master restart
 service salt-minion restart
 
-echo "sleeping for 10 seconds"
-sleep 10
-echo "sleeping done"
-salt-key -A -y
+salt-key list
+echo "installing on multiple minions"
 
   #read top.sls and start salt
 salt 'Ubuntu-1710-Salty-Minion' state.apply snmp
