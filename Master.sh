@@ -62,6 +62,8 @@ debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-upgrade select 
 
 #install needed programs
 apt-get -y install apache2
+apt-get -y install php
+apt-get -y install php*
 apt-get -y install snmp
 apt-get -y install snmpd
 apt-get -y install unzip
