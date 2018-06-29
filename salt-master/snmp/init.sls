@@ -1,0 +1,5 @@
+snmp:
+  pkg:
+    - installed
+
+
