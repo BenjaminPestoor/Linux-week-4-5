@@ -60,7 +60,11 @@ debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/admin-pass password admi
 debconf-set-selections <<< 'phpmyadmin phpmyadmin/mysql/app-pass password admin'
 debconf-set-selections <<< 'rsyslog-mysql rsyslog-mysql/dbconfig-upgrade select true'
 
-#install needed programs
+  #installing mysql
+apt-get -y install mysql-server
+apt-get -y install rsyslog-mysql
+
+  #install needed programs
 apt-get -y install apache2
 apt-get -y install php
 apt-get -y install php*
@@ -69,12 +73,8 @@ apt-get -y install snmpd
 apt-get -y install unzip
 apt install -y phpmyadmin
 apt-get -y install php7.1-ldap
-apt-get -y install php libapache2-mod-php
 echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
 
-  #installing mysql
-apt-get -y install mysql-server
-apt-get -y install rsyslog-mysql
 
 echo "accepting salt keys"
   #accepting key salt-minion
@@ -91,7 +91,7 @@ service apache2 restart
 
   #creating database cacti
 mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
-#wget http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
+wget http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
   #importing sql databse
 mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
 chown -R root:www-data /var/www/html/cacti
