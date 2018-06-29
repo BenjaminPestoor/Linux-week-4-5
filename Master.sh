@@ -66,6 +66,8 @@ apt-get -y install snmp
 apt-get -y install snmpd
 apt-get -y install unzip
 apt install -y phpmyadmin
+apt-get -y install php7.1-ldap
+echo "Include /etc/phpmyadmin/apache.conf" >> /etc/apache2/apache2.conf
 
   #installing mysql
 apt-get -y install mysql-server
@@ -80,9 +82,7 @@ salt-key -A -y
 #INSTALL CACTI
 #==============================================
 wget http://10.1.1.6/salt-master/salt-master/cacti.zip
-wget https://www.cacti.net/downloads/cacti-1.1.38.zip
-unzip cacti-1.1.38.zip -d /var/www/html/
-mv /var/www/html/cacti-1.1.38/ var/www/html/cacti/
+unzip cacti.zip -d /var/www/html/
 
 service apache2 restart
 
@@ -91,6 +91,7 @@ mysql --user="root" --password="admin" -e "CREATE DATABASE cacti"
 #wget http://10.1.1.6/salt-master/salt-master/cacti.sql -O /var/www/html/cacti/cacti.sql
   #importing sql databse
 mysql --user="root" --password="admin" --database="cacti" -e "source /var/www/html/cacti/cacti.sql"
+chown -R root:www-data /var/www/html/cacti
 
 #==============================================
 #MASTER SALT STATE FILES FOR MINION
